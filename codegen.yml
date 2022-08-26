@@ -1,0 +1,10 @@
+overwrite: true
+schema: "/scheme"
+documents: "**/*.js"
+generates:
+  output/graphql.js:
+    plugins:
+      - "fragment-matcher"
+  ./graphql.schema.json:
+    plugins:
+      - "introspection"
