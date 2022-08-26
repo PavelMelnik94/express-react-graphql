@@ -1,4 +1,12 @@
-const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLSchema, GraphQLList, GraphQLNonNull} = require('graphql');
+const {
+    GraphQLObjectType,
+    GraphQLID,
+    GraphQLString,
+    GraphQLSchema,
+    GraphQLList,
+    GraphQLNonNull,
+    GraphQLEnumType
+} = require('graphql');
 
 const Project = require('../models/Project');
 const Client = require('../models/Client');
@@ -10,10 +18,11 @@ const ProjectType = new GraphQLObjectType({
         id: {type: GraphQLID},
         description: {type: GraphQLString},
         status: {type: GraphQLString},
+        name: {type: GraphQLString},
         client: {
             type: ClientType,
             resolve(parent) {
-                return Client.findById(parent.id);
+                return Client.findById(parent.clientId);
             }
 
         }
@@ -101,7 +110,38 @@ const mutation = new GraphQLObjectType({
             resolve(parent, args) {
                return  Client.findByIdAndDelete(args.id)
             }
-        }
+        },
+
+
+        // add project
+        addProject: {
+            type: ProjectType,
+            args: {
+                name: {type: GraphQLNonNull(GraphQLString)},
+                description: {type: GraphQLNonNull(GraphQLString)},
+                status: {type: new GraphQLEnumType({
+                        name: 'ProjectStatus',
+                        values: {
+                            'new': {value: 'Not Started'},
+                            'progress': {value: 'In Progress'},
+                            'completed': {value: 'Completed'},
+                        }
+                    }),
+                    defaultValue: 'Not started'
+                },
+                clientId: {type: GraphQLNonNull(GraphQLID)},
+            },
+            resolve(parent, args) {
+                const project = new Project({
+                    name: args.name,
+                    description: args.description,
+                    status: args.status,
+                    clientId: args.clientId,
+                })
+
+                return project.save();
+            }
+        },
     }
 })
 
