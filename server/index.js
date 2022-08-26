@@ -10,14 +10,14 @@ const port = process.env.PORT || 5000;
 const app = express();
 
 // Connect to database
-connectDB().then(() => {});
+connectDB().then(() => { });
 
 app.use(
     '/graphql',
     graphqlHTTP({
-    schema,
-    graphiql: process.env.NODE_ENV === 'development'
-}))
+        schema,
+        graphiql: process.env.NODE_ENV === 'development'
+    }))
 
 app.listen(port, () => {
     console.log(`>>>>> listening server on port ${port}`.bgGreen.underline.bold);
