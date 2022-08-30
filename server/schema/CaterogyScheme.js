@@ -50,7 +50,7 @@ const ProductType = new GraphQLObjectType({
 
 // Query
 const RootQuery = new GraphQLObjectType({
-    name: 'Query',
+    name: 'RootQueryType',
     fields: {
 
         //category
@@ -143,15 +143,15 @@ const mutation = new GraphQLObjectType({
         },
 
         // delete a category
-        deleteCategory: {
-            type: CategoryType,
-            args: {
-                id: { type: GraphQLNonNull(GraphQLID) },
-            },
-            resolve(parent, args) {
-                return Category.findByIdAndDelete(args.id)
-            }
-        },
+        // deleteCategory: {
+        //     type: CategoryType,
+        //     args: {
+        //         id: { type: GraphQLNonNull(GraphQLID) },
+        //     },
+        //     resolve(parent, args) {
+        //         return Category.findByIdAndDelete(args.id)
+        //     }
+        // },
 
 
         // update a category
